@@ -1,39 +1,66 @@
-// ================= 1. TOAST NOTIFICATION (Cute Alert) =================
+// ================= 1. TOAST NOTIFICATION =================
 let toastTimer;
 function showToast(msg) {
     const toast = document.getElementById('toast-notify');
     document.getElementById('toast-msg').innerText = msg;
     toast.classList.remove('hidden');
-    void toast.offsetWidth; // Reflow
+    void toast.offsetWidth; 
     toast.classList.add('show');
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-// ================= 2. NAVIGATION (เปลี่ยนหน้าแบบ Smooth) =================
+// ================= 2. IMAGE COMPRESSION SYSTEM (ใหม่! บีบอัดรูปก่อนเซฟ) =================
+// ฟังก์ชันนี้จะทำหน้าที่ย่อรูปใหญ่ๆ ให้ขนาดไม่เกิน 800px เพื่อไม่ให้ LocalStorage เต็ม
+function compressImage(file, callback) {
+    showToast('กำลังบีบอัดรูปภาพ... ⏳'); // แจ้งเตือนผู้ใช้ว่ากำลังประมวลผล
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 800; // ขนาดความกว้าง/ยาวสูงสุด
+            let width = img.width;
+            let height = img.height;
+
+            // คำนวณอัตราส่วนการย่อ
+            if (width > height) {
+                if (width > MAX_SIZE) { height *= MAX_SIZE / width; width = MAX_SIZE; }
+            } else {
+                if (height > MAX_SIZE) { width *= MAX_SIZE / height; height = MAX_SIZE; }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // แปลงกลับเป็น Base64 แบบ JPEG คุณภาพ 70% (ไฟล์เล็กแต่ยังชัด)
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+            callback(compressedBase64);
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+// ================= 3. NAVIGATION =================
 function switchPage(targetId) {
-    // ซ่อนทุกหน้า
-    const sections = document.querySelectorAll('.view-section');
-    sections.forEach(sec => {
+    document.querySelectorAll('.view-section').forEach(sec => {
         sec.classList.remove('active');
         sec.classList.add('hidden');
     });
-
-    // โชว์หน้าที่เลือก
     const target = document.getElementById(targetId);
     if (target) {
         target.classList.remove('hidden');
         void target.offsetWidth; 
         target.classList.add('active');
     }
-
-    // เลื่อนกลับไปบนสุดของกล่อง Carrd
-    document.querySelector('.carrd-main-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ================= 3. DATABASE (LocalStorage 100%) =================
+// ================= 4. DATABASE =================
 let db = {};
-// ข้อมูลเริ่มต้นสำหรับหมวดต่างๆ
 const defaultDB = {
     web: [ { title: 'เว็บลิงก์ร้าน 69.-', link: 'https://example.com', img: 'https://placehold.co/400x250/ffeef2/f092a5?text=Web+Design' } ],
     id: [ { title: 'ป้ายลายอนิเมะ', img: 'https://placehold.co/400x400/ffeef2/f092a5?text=ID+Banner' } ],
@@ -41,30 +68,28 @@ const defaultDB = {
 };
 
 function initApplication() {
-    const savedData = localStorage.getItem('eoy_carrd_v6');
+    const savedData = localStorage.getItem('eoy_bento_v7');
     if (savedData) { db = JSON.parse(savedData); } 
     else { db = defaultDB; saveDB(); }
     
-    // เรนเดอร์แกลลอรี่ทุกหน้า
     Object.keys(db).forEach(cat => renderGallery(cat));
-    // โหลดข้อความและรูปภาพ Static
+    renderHomeRecentWorks(); // โหลดหน้าหลัก
     loadStaticData();
 }
 
-function saveDB() { localStorage.setItem('eoy_carrd_v6', JSON.stringify(db)); }
+function saveDB() { localStorage.setItem('eoy_bento_v7', JSON.stringify(db)); }
 
-// ================= 4. RENDER GALLERY =================
+// ================= 5. RENDER GALLERY =================
 function renderGallery(cat) {
     const container = document.getElementById(`gal-${cat}`);
     if (!container) return;
     container.innerHTML = ''; 
 
     if (db[cat].length === 0) {
-        container.innerHTML = `<p style="text-align:center; color:#9e8e92; font-size:13px; grid-column:1/-1; padding:20px;">ยังไม่มีผลงานในหมวดนี้ 🌸</p>`;
+        container.innerHTML = `<p style="text-align:center; color:#9e8e92; font-size:13px;">ยังไม่มีผลงานในหมวดนี้ 🌸</p>`;
         return;
     }
 
-    // เรียงของใหม่ไว้บนสุด
     [...db[cat]].reverse().forEach((item, rawIdx) => {
         const idx = db[cat].length - 1 - rawIdx;
         const card = document.createElement('div');
@@ -97,7 +122,35 @@ function renderGallery(cat) {
     if (document.body.classList.contains('admin-mode')) bindContentEditable();
 }
 
-// ================= 5. ADD & DELETE (CRUD) =================
+// เรนเดอร์กล่องผลงานล่าสุดหน้าแรก
+function renderHomeRecentWorks() {
+    const slider = document.getElementById('home-recent-works');
+    slider.innerHTML = '';
+    let allWorks = [];
+    Object.keys(db).forEach(cat => {
+        db[cat].forEach(item => { allWorks.push(item); });
+    });
+    
+    // ดึง 5 ผลงานล่าสุด
+    const recent = allWorks.reverse().slice(0, 5);
+    
+    if (recent.length === 0) {
+        slider.innerHTML = '<p style="font-size:12px; color:#aaa; padding:10px;">ยังไม่มีผลงานอัปเดตค่ะ</p>';
+        return;
+    }
+
+    recent.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'recent-card';
+        card.innerHTML = `
+            <img src="${item.img}" alt="${item.title}">
+            <h4>${item.title}</h4>
+        `;
+        slider.appendChild(card);
+    });
+}
+
+// ================= 6. ADD & DELETE (ใช้ระบบบีบอัด) =================
 let activeCategory = '';
 let tempImgBase64 = '';
 
@@ -107,20 +160,19 @@ function openAddDataModal(cat) {
     document.getElementById('inp-work-title').value = '';
     document.getElementById('inp-work-link').value = '';
     document.getElementById('preview-new-img').src = 'https://placehold.co/400x300/fff0f5/ffb6c1?text=Click+to+Upload';
-    
-    // ซ่อนช่องลิงก์ถ้าเป็นป้ายไอดี
     document.getElementById('inp-work-link').style.display = (cat === 'id') ? 'none' : 'block';
     document.getElementById('modal-add').classList.remove('hidden');
 }
 
-function previewNewImage(e) {
-    if(e.target.files[0]){
-        const reader = new FileReader();
-        reader.onload = ev => {
-            tempImgBase64 = ev.target.result;
+// อัปโหลดตอนเพิ่มผลงาน (ผ่าน Canvas Compression)
+function previewAndCompressImage(e) {
+    const file = e.target.files[0];
+    if(file){
+        compressImage(file, function(compressedBase64) {
+            tempImgBase64 = compressedBase64;
             document.getElementById('preview-new-img').src = tempImgBase64;
-        };
-        reader.readAsDataURL(e.target.files[0]);
+            showToast('บีบอัดรูปเสร็จสิ้น เตรียมพร้อมเซฟ! ✅');
+        });
     }
 }
 
@@ -136,10 +188,11 @@ function saveNewRecord() {
         db[activeCategory].push({ title: title, link: link, img: tempImgBase64 });
         saveDB();
         renderGallery(activeCategory);
+        renderHomeRecentWorks(); // อัปเดตหน้าแรก
         closeModal('modal-add');
         showToast('เพิ่มผลงานสำเร็จ! 🎀');
     } catch (err) {
-        alert('รูปภาพใหญ่เกินไป กรุณาลดขนาดภาพก่อนอัปโหลดค่ะ');
+        alert('เกิดข้อผิดพลาดในการเซฟพื้นที่จัดเก็บ');
     }
 }
 
@@ -148,11 +201,12 @@ function deleteRecord(cat, idx) {
         db[cat].splice(idx, 1);
         saveDB();
         renderGallery(cat);
+        renderHomeRecentWorks();
         showToast('ลบผลงานเรียบร้อย');
     }
 }
 
-// ================= 6. GLOBAL IMAGE UPLOADER =================
+// ================= 7. GLOBAL IMAGE UPLOADER (ผ่าน Canvas Compression) =================
 let uploadTargetInfo = {};
 
 function openUploader(targetId) {
@@ -165,26 +219,25 @@ function initGalleryUpload(cat, idx) {
     document.getElementById('global-file-uploader').click();
 }
 
-function processGlobalFile(e) {
-    if(e.target.files[0]) {
-        const reader = new FileReader();
-        reader.onload = ev => {
-            const dataUrl = ev.target.result;
+function processGlobalFileAndCompress(e) {
+    const file = e.target.files[0];
+    if(file) {
+        compressImage(file, function(compressedBase64) {
             if (uploadTargetInfo.type === 'static') {
-                document.getElementById(uploadTargetInfo.id).src = dataUrl;
-                localStorage.setItem(uploadTargetInfo.id, dataUrl);
+                document.getElementById(uploadTargetInfo.id).src = compressedBase64;
+                localStorage.setItem(uploadTargetInfo.id, compressedBase64);
             } else if (uploadTargetInfo.type === 'gallery') {
-                db[uploadTargetInfo.cat][uploadTargetInfo.idx].img = dataUrl;
+                db[uploadTargetInfo.cat][uploadTargetInfo.idx].img = compressedBase64;
                 saveDB();
                 renderGallery(uploadTargetInfo.cat);
+                renderHomeRecentWorks();
             }
             showToast('อัปเดตรูปภาพเรียบร้อย 📸');
-        };
-        reader.readAsDataURL(e.target.files[0]);
+        });
     }
 }
 
-// ================= 7. ADMIN SYSTEM =================
+// ================= 8. ADMIN SYSTEM =================
 function toggleAdminSystem() {
     if (document.body.classList.contains('admin-mode')) {
         if(confirm('ปิดโหมดแอดมินแก้ไขเว็บ?')) {
@@ -211,14 +264,11 @@ function verifyLogin() {
     }
 }
 
-// ระบบ Edit Text กดแก้ได้เลย
 function bindContentEditable() {
     document.querySelectorAll('.edit-text').forEach(el => {
         el.setAttribute('contenteditable', 'true');
         el.onblur = function() {
             if(!this.id) this.id = 'txt-' + Math.random().toString(36).substr(2, 9);
-            
-            // ถ้าเป็นการแก้ชื่อผลงานใน Gallery
             if(this.id.startsWith('txt-') && this.id.split('-').length === 3) {
                 const parts = this.id.split('-');
                 if(db[parts[1]] && db[parts[1]][parts[2]]) {
@@ -226,7 +276,6 @@ function bindContentEditable() {
                     saveDB();
                 }
             } else {
-                // ถ้าแก้ข้อความทั่วไป (เช่น Bio, ชื่อร้าน)
                 localStorage.setItem(this.id, this.innerText);
             }
             showToast('บันทึกข้อความแล้ว');
@@ -235,13 +284,11 @@ function bindContentEditable() {
 }
 
 function loadStaticData() {
-    // โหลดรูปคงที่
     ['img-profile', 'img-mascot'].forEach(id => {
         const savedImg = localStorage.getItem(id);
         if(savedImg) document.getElementById(id).src = savedImg;
     });
 
-    // โหลดข้อความคงที่
     document.querySelectorAll('.edit-text').forEach(el => {
         if (el.id && el.id.split('-').length !== 3) {
             const savedTxt = localStorage.getItem(el.id);
@@ -250,9 +297,9 @@ function loadStaticData() {
     });
 }
 
-// ================= 8. UTILITIES =================
+// ================= 9. UTILITIES =================
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 function openZoomView(src) { document.getElementById('zoom-img-display').src = src; document.getElementById('modal-zoom').classList.remove('hidden'); }
 
-// รันแอปพลิเคชันตอนเปิดหน้าเว็บ
+// Start App
 window.onload = initApplication;
