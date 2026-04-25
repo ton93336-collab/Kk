@@ -11,7 +11,6 @@
 <body>
 
     <div class="aesthetic-pattern-bg"></div>
-    
     <div class="sparkles-bg">
         <i class="fa-solid fa-sparkle sp-1"></i>
         <i class="fa-solid fa-star-of-life sp-2"></i>
@@ -20,7 +19,7 @@
     </div>
 
     <div id="toast-notify" class="cute-toast">
-        <div class="toast-icon"><i class="fa-solid fa-check"></i></div>
+        <div class="toast-icon"><i class="fa-solid fa-bell"></i></div>
         <span id="toast-msg">Success</span>
     </div>
 
@@ -28,84 +27,84 @@
         
         <section id="view-home" class="view-section active">
             
-            <header class="profile-header">
-                <div class="avatar-wrapper">
-                    <img src="https://placehold.co/300x300/ffd1dc/ffffff?text=Eoy" id="img-profile" alt="Profile">
-                    <button class="admin-ui btn-edit-avatar" onclick="openUploader('img-profile')"><i class="fa-solid fa-camera"></i></button>
-                    <div class="cute-tag top-tag"><i class="fa-solid fa-crown"></i> Creator</div>
+            <div class="bento-layout">
+                <div class="bento-box profile-bento col-span-2">
+                    <div class="avatar-wrapper">
+                        <img src="https://placehold.co/300x300/ffd1dc/ffffff?text=Eoy" id="img-profile" alt="Profile">
+                        <button class="admin-ui btn-edit-avatar" onclick="openUploader('img-profile')"><i class="fa-solid fa-camera"></i></button>
+                        <div class="cute-tag top-tag"><i class="fa-solid fa-crown"></i> Creator</div>
+                    </div>
+                    <h1 class="brand-title edit-text" id="txt-brand-name">NONIOAEY</h1>
+                    <p class="bio-desc edit-text" id="txt-bio">Visual Artist & Web Designer. รับออกแบบเว็บไซต์และป้ายไอดีเกมระดับพรีเมียม 🎀</p>
+                    <div class="social-dock">
+                        <a href="https://www.facebook.com/share/1De6NiueGU/?mibextid=wwXIfr" target="_blank" class="social-circle"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://line.me/ti/p/xnh050s5VP" target="_blank" class="social-circle"><i class="fa-brands fa-line"></i></a>
+                    </div>
                 </div>
-                
-                <h1 class="brand-title edit-text" id="txt-brand-name">NONIOAEY</h1>
-                
-                <div class="status-pill">
-                    <div class="dot-blink"></div>
-                    <span class="edit-text" id="txt-status">COMMISSION OPEN</span>
+
+                <div class="bento-box marquee-bento col-span-2 stripe-candy">
+                    <div class="marquee-content edit-text" id="txt-status">
+                        <span>✨ COMMISSION OPEN ✨ รับทำเว็บไซต์ ✨ ป้ายไอดีเกม ✨ ทักแชทได้เลยค่า ✨</span>
+                    </div>
                 </div>
-                
-                <p class="bio-desc edit-text" id="txt-bio">Visual Artist & Web Designer. รับออกแบบเว็บไซต์และป้ายขายไอดีเกมระดับพรีเมียม</p>
 
-                <div class="social-dock">
-                    <a href="https://www.facebook.com/share/1De6NiueGU/?mibextid=wwXIfr" target="_blank" class="social-circle"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="https://line.me/ti/p/xnh050s5VP" target="_blank" class="social-circle"><i class="fa-brands fa-line"></i></a>
+                <div class="bento-box menu-bento col-span-2">
+                    <h3 class="bento-head"><i class="fa-solid fa-compass"></i> Explore Services</h3>
+                    <nav class="bento-nav-grid">
+                        <button class="bento-nav-btn" onclick="switchPage('view-web')">
+                            <div class="b-icon bg-pink"><i class="fa-solid fa-laptop-code"></i></div>
+                            <span>งานเว็บ</span>
+                        </button>
+                        <button class="bento-nav-btn" onclick="switchPage('view-id')">
+                            <div class="b-icon bg-blue"><i class="fa-solid fa-palette"></i></div>
+                            <span>ป้ายไอดี</span>
+                        </button>
+                        <button class="bento-nav-btn" onclick="switchPage('view-decor')">
+                            <div class="b-icon bg-purple"><i class="fa-solid fa-shapes"></i></div>
+                            <span>บล็อกป้าย</span>
+                        </button>
+                        <button class="bento-nav-btn" onclick="switchPage('view-rov')">
+                            <div class="b-icon bg-yellow"><i class="fa-solid fa-gamepad"></i></div>
+                            <span>ROV</span>
+                        </button>
+                        <button class="bento-nav-btn" onclick="switchPage('view-idv')">
+                            <div class="b-icon bg-green"><i class="fa-solid fa-mask"></i></div>
+                            <span>IDV</span>
+                        </button>
+                        <button class="bento-nav-btn" onclick="switchPage('view-forms')">
+                            <div class="b-icon bg-peach"><i class="fa-regular fa-window-restore"></i></div>
+                            <span>ฟอร์ม</span>
+                        </button>
+                        <button class="bento-nav-btn" onclick="switchPage('view-course')">
+                            <div class="b-icon bg-mint"><i class="fa-solid fa-graduation-cap"></i></div>
+                            <span>คอร์ส</span>
+                        </button>
+                        <button class="bento-nav-btn" onclick="switchPage('view-faq')">
+                            <div class="b-icon bg-gray"><i class="fa-solid fa-basket-shopping"></i></div>
+                            <span>สั่งซื้อ</span>
+                        </button>
+                    </nav>
                 </div>
-            </header>
 
-            <div class="divider-cute"><i class="fa-solid fa-heart"></i></div>
-
-            <nav class="nav-menu-grid">
-                <button class="nav-btn" onclick="switchPage('view-web')">
-                    <div class="nav-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                    <div class="nav-text">งานเว็บ</div>
-                    <i class="fa-solid fa-angle-right nav-arrow"></i>
-                </button>
-                <button class="nav-btn" onclick="switchPage('view-id')">
-                    <div class="nav-icon"><i class="fa-solid fa-palette"></i></div>
-                    <div class="nav-text">ป้ายไอดี</div>
-                    <i class="fa-solid fa-angle-right nav-arrow"></i>
-                </button>
-                <button class="nav-btn" onclick="switchPage('view-decor')">
-                    <div class="nav-icon"><i class="fa-solid fa-shapes"></i></div>
-                    <div class="nav-text">บล็อกป้าย</div>
-                    <i class="fa-solid fa-angle-right nav-arrow"></i>
-                </button>
-                <button class="nav-btn" onclick="switchPage('view-rov')">
-                    <div class="nav-icon"><i class="fa-solid fa-gamepad"></i></div>
-                    <div class="nav-text">กลุ่ม ROV</div>
-                    <i class="fa-solid fa-angle-right nav-arrow"></i>
-                </button>
-                <button class="nav-btn" onclick="switchPage('view-idv')">
-                    <div class="nav-icon"><i class="fa-solid fa-mask"></i></div>
-                    <div class="nav-text">Identity V</div>
-                    <i class="fa-solid fa-angle-right nav-arrow"></i>
-                </button>
-                <button class="nav-btn" onclick="switchPage('view-forms')">
-                    <div class="nav-icon"><i class="fa-regular fa-window-restore"></i></div>
-                    <div class="nav-text">กลุ่มฟอร์ม</div>
-                    <i class="fa-solid fa-angle-right nav-arrow"></i>
-                </button>
-                <button class="nav-btn" onclick="switchPage('view-course')">
-                    <div class="nav-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                    <div class="nav-text">คอร์สเรียน</div>
-                    <i class="fa-solid fa-angle-right nav-arrow"></i>
-                </button>
-                <button class="nav-btn highlight-btn" onclick="switchPage('view-faq')">
-                    <div class="nav-icon"><i class="fa-solid fa-basket-shopping"></i></div>
-                    <div class="nav-text">FAQ & สั่งซื้อ</div>
-                    <i class="fa-solid fa-angle-right nav-arrow"></i>
-                </button>
-            </nav>
+                <div class="bento-box recent-bento col-span-2">
+                    <h3 class="bento-head"><i class="fa-solid fa-bolt"></i> Recent Creations</h3>
+                    <div class="recent-slider" id="home-recent-works">
+                        </div>
+                </div>
+            </div>
         </section>
 
         <section id="view-web" class="view-section hidden">
             <div class="top-bar">
                 <button class="btn-back" onclick="switchPage('view-home')"><i class="fa-solid fa-chevron-left"></i></button>
                 <h2 class="page-heading">งานเว็บ</h2>
-                <div style="width: 45px;"></div> </div>
+                <div style="width: 45px;"></div>
+            </div>
 
             <div class="memo-box">
                 <div class="memo-tape"></div>
                 <p class="edit-text text-center" id="txt-web-desc">รับทำเว็บไซต์ลิงก์ร้าน มีทั้งเทมเพลตและสั่งทำพิเศษ</p>
-                <div class="price-list mt-15">
+                <div class="price-list stripe-bg mt-15">
                     <h4 class="price-head"><i class="fa-solid fa-tag"></i> เรทราคา</h4>
                     <ul>
                         <li><span>เว็บโอนเงิน</span><span class="badge">69.-</span></li>
@@ -132,7 +131,7 @@
                 <div class="memo-tape"></div>
                 <p class="edit-text text-center" id="txt-id-desc">รับทำป้ายขายไอดี ดีไซน์สวย โดดเด่น ดึงดูดลูกค้า</p>
                 <div class="price-split mt-15">
-                    <div class="price-list half">
+                    <div class="price-list half stripe-bg">
                         <h4 class="price-head"><i class="fa-solid fa-bolt"></i> Skin Rate</h4>
                         <ul>
                             <li><span>1-100 สกิน</span><span class="badge">0.50</span></li>
@@ -188,7 +187,7 @@
         <section id="view-faq" class="view-section hidden">
             <div class="top-bar"><button class="btn-back" onclick="switchPage('view-home')"><i class="fa-solid fa-chevron-left"></i></button><h2 class="page-heading">FAQ & วิธีสั่งซื้อ</h2><div style="width: 45px;"></div></div>
             
-            <div class="info-card">
+            <div class="bento-box text-left">
                 <h4 class="card-head"><i class="fa-solid fa-clipboard-question"></i> คำถามที่พบบ่อย</h4>
                 <div class="qa-item"><b>Q: สั่งงานช่องทางไหน?</b><p>A: ทัก Inbox Facebook หรือ Line ได้เลยค่ะ</p></div>
                 <div class="qa-item"><b>Q: รองานนานไหม?</b><p>A: ปกติ 4-8 ชั่วโมง (ถ้าคิวเยอะจะแจ้งก่อนโอนเงินค่ะ)</p></div>
@@ -204,9 +203,7 @@
         </section>
 
         <div class="footer-sign">© NONIOAEY STUDIO</div>
-        
         <button class="btn-secret-admin" onclick="toggleAdminSystem()"><i class="fa-solid fa-lock"></i></button>
-
     </main>
 
     <div class="mascot-floater">
@@ -223,14 +220,13 @@
         <div class="modal-box">
             <button class="btn-close-modal" onclick="closeModal('modal-add')"><i class="fa-solid fa-xmark"></i></button>
             <h3 class="modal-title"><i class="fa-solid fa-wand-magic-sparkles"></i> เพิ่มผลงานใหม่</h3>
-            
             <input type="text" id="inp-work-title" class="cute-input" placeholder="ชื่อผลงาน...">
             <input type="text" id="inp-work-link" class="cute-input" placeholder="ลิงก์ผลงาน (ถ้ามี)...">
             
             <div class="dropzone-area" onclick="document.getElementById('file-upload-new').click()">
                 <img id="preview-new-img" src="https://placehold.co/400x300/fff0f5/ffb6c1?text=Click+to+Upload" alt="Preview">
-                <input type="file" id="file-upload-new" class="hidden" accept="image/*" onchange="previewNewImage(event)">
-                <div class="dropzone-tag"><i class="fa-solid fa-cloud-arrow-up"></i> เลือกรูปภาพ</div>
+                <input type="file" id="file-upload-new" class="hidden" accept="image/*" onchange="previewAndCompressImage(event)">
+                <div class="dropzone-tag"><i class="fa-solid fa-cloud-arrow-up"></i> เลือกรูปภาพ (บีบอัดอัตโนมัติ)</div>
             </div>
             
             <button class="btn-primary-action" onclick="saveNewRecord()">บันทึกข้อมูล</button>
@@ -242,13 +238,13 @@
             <button class="btn-close-modal" onclick="closeModal('modal-login')"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-icon"><i class="fa-solid fa-shield-cat"></i></div>
             <h3 class="modal-title">Admin Login</h3>
-            <input type="password" id="inp-admin-pass" class="cute-input mt-15" placeholder="ใส่รหัสผ่าน...">
+            <input type="password" id="inp-admin-pass" class="cute-input mt-15" placeholder="ใส่รหัสผ่าน (ss11)...">
             <p id="err-login" class="hidden error-msg">รหัสผ่านไม่ถูกต้อง!</p>
             <button class="btn-primary-action mt-10" onclick="verifyLogin()">ตกลง</button>
         </div>
     </div>
 
-    <input type="file" id="global-file-uploader" accept="image/*" class="hidden" onchange="processGlobalFile(event)">
+    <input type="file" id="global-file-uploader" accept="image/*" class="hidden" onchange="processGlobalFileAndCompress(event)">
 
     <script src="script.js"></script>
 </body>
